@@ -1,13 +1,13 @@
 "use client";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { Link } from "next-view-transitions";
+import Image from "next/image";
 // Removed date-fns dependency
 import { strapiImage } from "@/lib/strapi/strapiImage";
-import DynamicZoneManager from "./dynamic-zone/manager";
 import { Article } from "@/types/types";
-import { ArrowLeft, Calendar, Clock, Tag, Share2, Facebook, Twitter } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Facebook, Share2, Tag, Twitter } from "lucide-react";
 import { BlogCardVertical } from "./blog-card";
+import DynamicZoneManager from "./dynamic-zone/manager";
 
 export function BlogLayout({
   article,

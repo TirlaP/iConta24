@@ -9,6 +9,7 @@ export interface Image {
 
 export interface Article {
   title: string;
+  documentId: string;
   description: string;
   slug: string;
   content: string;
