@@ -6,8 +6,8 @@
   "scripts": {
     "develop": "strapi develop",
     "start": "strapi start",
-    "build": "npm run build:force",
-    "build:force": "FORCE_COLOR=0 NODE_OPTIONS='--max-old-space-size=1024' strapi build --ignore-prompts || true",
+    "build": "node ./scripts/safe-build.js",
+    "build:force": "FORCE_COLOR=0 NODE_OPTIONS='--max-old-space-size=1024' strapi build || true",
     "build:no-admin": "strapi build --no-optimization",
     "strapi": "strapi",
     "deploy": "strapi deploy",
@@ -18,8 +18,7 @@
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "typescript": "^5"
+    "@types/react-dom": "^18"
   },
   "dependencies": {
     "@strapi/plugin-cloud": "5.12.4",
