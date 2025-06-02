@@ -87,6 +87,11 @@ const getDeepPopulate = (uid: UID.Schema, opts: Options = {}) => {
 
 export default (config, { strapi }: { strapi: Core.Strapi }) => {
   return async (ctx, next) => {
+    // Skip health check and other system endpoints
+    if (ctx.request.url.startsWith('/api/health')) {
+      return await next();
+    }
+    
     if (ctx.request.url.startsWith('/api/') && ctx.request.method === 'GET' && !ctx.query.populate && !ctx.request.url.includes('/api/users') && !ctx.request.url.includes('/api/seo')
     ) {
       strapi.log.info('Using custom Dynamic-Zone population Middleware...');
