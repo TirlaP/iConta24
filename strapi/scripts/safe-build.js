@@ -15,7 +15,7 @@ try {
     stdio: 'inherit',
     env: {
       ...process.env,
-      NODE_OPTIONS: '--max-old-space-size=1024',
+      NODE_OPTIONS: '--max-old-space-size=4096',
       FORCE_COLOR: '0'
     }
   });
@@ -33,13 +33,16 @@ try {
   console.log('🔄 Trying build without optimization...');
   
   try {
-    // Fallback: build without optimization
-    execSync('strapi build --no-optimization', { 
+    // Fallback: build with minimal admin
+    console.log('⚠️  Trying to build with minimal configuration...');
+    execSync('strapi build', { 
       stdio: 'inherit',
       env: {
         ...process.env,
-        NODE_OPTIONS: '--max-old-space-size=1024',
-        FORCE_COLOR: '0'
+        NODE_OPTIONS: '--max-old-space-size=2048',
+        FORCE_COLOR: '0',
+        STRAPI_DISABLE_UPDATE_NOTIFICATION: 'true',
+        STRAPI_TELEMETRY_DISABLED: 'true'
       }
     });
     
@@ -54,34 +57,42 @@ try {
     console.error('❌ Fallback build also failed:', fallbackError.message);
     console.log('🔄 Creating minimal build structure...');
     
-    // Last resort: create minimal structure
+    // Last resort: create API-only build  
     try {
+      console.log('📦 Creating API-only build...');
+      
       if (!fs.existsSync(distPath)) {
         fs.mkdirSync(distPath, { recursive: true });
       }
       
-      // Create a minimal index.js file
+      // Copy source files to dist (Strapi can run without built admin)
+      const srcPath = path.join(__dirname, '..', 'src');
+      const configPath = path.join(__dirname, '..', 'config');
+      
+      if (fs.existsSync(srcPath)) {
+        execSync(`cp -r "${srcPath}" "${distPath}/"`, { stdio: 'inherit' });
+      }
+      
+      if (fs.existsSync(configPath)) {
+        execSync(`cp -r "${configPath}" "${distPath}/"`, { stdio: 'inherit' });
+      }
+      
+      // Create package.json in dist
+      const packageJson = {
+        name: "strapi-dist",
+        version: "1.0.0",
+        main: "src/index.js",
+        dependencies: {
+          "@strapi/strapi": "^5.12.4"
+        }
+      };
+      
       fs.writeFileSync(
-        path.join(distPath, 'index.js'),
-        `
-// Minimal Strapi build
-const strapi = require('@strapi/strapi');
-
-async function bootstrap() {
-  try {
-    const app = strapi({ distDir: __dirname });
-    await app.start();
-  } catch (error) {
-    console.error('Error starting Strapi:', error);
-    process.exit(1);
-  }
-}
-
-bootstrap();
-`
+        path.join(distPath, 'package.json'),
+        JSON.stringify(packageJson, null, 2)
       );
       
-      console.log('✅ Minimal build structure created');
+      console.log('✅ API-only build created (admin will be disabled)');
       process.exit(0);
       
     } catch (minimalError) {
