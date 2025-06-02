@@ -5,7 +5,7 @@ import { BlurImage } from "@/components/blur-image";
 import Image from "next/image";
 import Balancer from "react-wrap-balancer";
 import { truncate } from "@/lib/utils";
-import { format } from "date-fns";
+// Removed date-fns dependency
 import { strapiImage } from "@/lib/strapi/strapiImage";
 import { Article } from "@/types/types";
 import { motion } from "framer-motion";
@@ -83,7 +83,7 @@ export const BlogCard = ({ article, locale }: { article: Article, locale: string
               <div className="flex items-center gap-4 text-sm text-gray-500">
                 <div className="flex items-center gap-1">
                   <Calendar className="w-4 h-4" />
-                  <span>{format(new Date(article.publishedAt), "dd MMM yyyy")}</span>
+                  <span>{new Date(article.publishedAt).toLocaleDateString('ro-RO', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <Clock className="w-4 h-4" />
@@ -160,7 +160,7 @@ export const BlogCardVertical = ({ article, locale }: { article: Article, locale
             <div className="flex items-center gap-3 text-xs text-gray-500">
               <div className="flex items-center gap-1">
                 <Calendar className="w-3.5 h-3.5" />
-                <span>{format(new Date(article.publishedAt), "dd MMM yyyy")}</span>
+                <span>{new Date(article.publishedAt).toLocaleDateString('ro-RO', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
               </div>
               <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
               <div className="flex items-center gap-1">

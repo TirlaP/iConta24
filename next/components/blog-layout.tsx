@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Link } from "next-view-transitions";
-import { format } from "date-fns";
+// Removed date-fns dependency
 import { strapiImage } from "@/lib/strapi/strapiImage";
 import DynamicZoneManager from "./dynamic-zone/manager";
 import { Article } from "@/types/types";
@@ -83,7 +83,7 @@ export function BlogLayout({
               <div className="flex flex-wrap items-center gap-4 text-gray-600 mb-8">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
-                  <span>{format(new Date(article.publishedAt), "dd MMMM yyyy")}</span>
+                  <span>{new Date(article.publishedAt).toLocaleDateString('ro-RO', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
                 </div>
                 <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
                 <div className="flex items-center gap-2">
@@ -201,7 +201,7 @@ export function BlogLayout({
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {relatedArticles.map((relatedArticle, index) => (
                 <motion.div
-                  key={relatedArticle.id}
+                  key={relatedArticle.documentId || relatedArticle.slug || index}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}

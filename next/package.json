@@ -23,7 +23,6 @@
     "@types/fuzzy-search": "^2.1.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "date-fns": "^3.6.0",
     "framer-motion": "^11.5.4",
     "fuzzy-search": "^3.2.1",
     "lucide-react": "^0.511.0",
