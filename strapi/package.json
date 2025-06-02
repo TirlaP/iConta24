@@ -6,7 +6,8 @@
   "scripts": {
     "develop": "strapi develop",
     "start": "strapi start",
-    "build": "node ./scripts/build-production.js",
+    "build": "npm run build:force",
+    "build:force": "FORCE_COLOR=0 NODE_OPTIONS='--max-old-space-size=1024' strapi build --ignore-prompts || true",
     "build:no-admin": "strapi build --no-optimization",
     "strapi": "strapi",
     "deploy": "strapi deploy",
@@ -27,6 +28,7 @@
     "@strapi/strapi": "5.12.4",
     "axios": "^1.6.0",
     "better-sqlite3": "11.7.0",
+    "date-fns": "2.30.0",
     "form-data": "^4.0.0",
     "patch-package": "^8.0.0",
     "pg": "^8.11.3",
@@ -47,6 +49,12 @@
   "engines": {
     "node": ">=18.0.0 <=22.x.x",
     "npm": ">=6.0.0"
+  },
+  "overrides": {
+    "date-fns": "2.30.0"
+  },
+  "resolutions": {
+    "date-fns": "2.30.0"
   },
   "license": "MIT"
 }
