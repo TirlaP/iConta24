@@ -71,7 +71,7 @@ export default async function fetchContentType(
       // Perform the fetch request with timeout
       const response = await fetchWithTimeout(fullUrl, {
         method: 'GET',
-        cache: isEnabled ? 'no-store' : 'force-cache',
+        // Use Next.js revalidate instead of cache directive
         next: { revalidate: isEnabled ? 0 : 300 }, // 5 minutes cache for published content
       }, FETCH_TIMEOUT);
 
