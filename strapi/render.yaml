@@ -19,6 +19,10 @@ services:
         fromDatabase:
           name: iconta24-db
           property: connectionString
+      - key: STRAPI_TELEMETRY_DISABLED
+        value: true
+      - key: SKIP_ADMIN_BUILD
+        value: true
     healthCheckPath: /admin
 
 databases:
