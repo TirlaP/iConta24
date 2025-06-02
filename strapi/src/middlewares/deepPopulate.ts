@@ -21,6 +21,11 @@ const extractPathSegment = (url: string) => url.match(/\/([^/?]+)(?:\?|$)/)?.[1]
 
 const getDeepPopulate = (uid: UID.Schema, opts: Options = {}) => {
   const model = strapi.getModel(uid);
+  
+  if (!model || !model.attributes) {
+    return {};
+  }
+  
   const attributes = Object.entries(model.attributes);
 
   return attributes.reduce((acc: any, [attributeName, attribute]) => {
@@ -94,17 +99,29 @@ export default (config, { strapi }: { strapi: Core.Strapi }) => {
     
     if (ctx.request.url.startsWith('/api/') && ctx.request.method === 'GET' && !ctx.query.populate && !ctx.request.url.includes('/api/users') && !ctx.request.url.includes('/api/seo')
     ) {
-      strapi.log.info('Using custom Dynamic-Zone population Middleware...');
+      try {
+        const contentType = extractPathSegment(ctx.request.url);
+        const singular = pluralize.singular(contentType);
+        const uid = `api::${singular}.${singular}` as UID.Schema;
 
-      const contentType = extractPathSegment(ctx.request.url);
-      const singular = pluralize.singular(contentType)
-      const uid = `api::${singular}.${singular}`;
+        // Check if the model exists before trying to populate
+        const model = strapi.getModel(uid);
+        if (!model) {
+          strapi.log.warn(`Model not found for UID: ${uid}, skipping deep populate`);
+          return await next();
+        }
 
-      ctx.query.populate = {
-        // @ts-ignores 
-        ...getDeepPopulate(uid),
-        ...(!ctx.request.url.includes("products") && { localizations: { populate: {} } })
-      };
+        strapi.log.info('Using custom Dynamic-Zone population Middleware...');
+
+        ctx.query.populate = {
+          // @ts-ignore
+          ...getDeepPopulate(uid),
+          ...(!ctx.request.url.includes("products") && { localizations: { populate: {} } })
+        };
+      } catch (error) {
+        strapi.log.error('Deep populate middleware error:', error);
+        // Continue without deep populate if there's an error
+      }
     }
     await next();
   };
