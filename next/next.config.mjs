@@ -7,7 +7,10 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
   images: {
-    remotePatterns: [{ hostname: process.env.IMAGE_HOSTNAME || "localhost" }],
+    remotePatterns: [
+      { hostname: "localhost" },
+      { hostname: "iconta24-strapi.onrender.com" }
+    ],
   },
   pageExtensions: ["ts", "tsx"],
   async redirects() {
