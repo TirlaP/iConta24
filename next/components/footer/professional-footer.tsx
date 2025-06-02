@@ -58,8 +58,8 @@ export const ProfessionalFooter: React.FC<FooterProps> = ({ locale = "ro" }) => 
             <IContaLogo variant="light" className="mb-6" />
             
             <p className="text-white/80 mb-6 text-sm leading-relaxed max-w-sm">
-              "Contabilitatea înseamnă mai mult decât să operezi documente și să raportezi cifrele. 
-              Înseamnă să îl ajuți pe antreprenor să ia deciziile în direcția cifrelor pe care și le dorește."
+              &ldquo;Contabilitatea înseamnă mai mult decât să operezi documente și să raportezi cifrele. 
+              Înseamnă să îl ajuți pe antreprenor să ia deciziile în direcția cifrelor pe care și le dorește.&rdquo;
             </p>
 
             {/* Features */}

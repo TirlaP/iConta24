@@ -74,7 +74,7 @@ export const Testimonials: React.FC = () => {
                 </div>
 
                 {/* Text */}
-                <p className="text-gray-700 mb-6 italic">"{testimonial.text}"</p>
+                <p className="text-gray-700 mb-6 italic">&ldquo;{testimonial.text}&rdquo;</p>
 
                 {/* Author */}
                 <div className="flex items-center">

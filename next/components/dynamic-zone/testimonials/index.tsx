@@ -42,7 +42,7 @@ const TestimonialCard = ({ testimonial, index }: { testimonial: Testimonial; ind
         </div>
 
         {/* Text */}
-        <p className="text-gray-700 mb-6 italic leading-relaxed">"{testimonial.text}"</p>
+        <p className="text-gray-700 mb-6 italic leading-relaxed">&ldquo;{testimonial.text}&rdquo;</p>
 
         {/* Author */}
         <div className="flex items-center">
