@@ -1,15 +1,15 @@
-import React from 'react'
+import React from 'react';
 
+import { generateMetadataObject } from '@/lib/shared/metadata';
 import { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { generateMetadataObject } from '@/lib/shared/metadata';
 
 import { Footer } from '@/components/footer';
 import { Navbar } from '@/components/navbar';
 import { CartProvider } from '@/context/cart-context';
+import fetchContentType from '@/lib/strapi/fetchContentType';
 import { cn } from '@/lib/utils';
 import { ViewTransitions } from 'next-view-transitions';
-import fetchContentType from '@/lib/strapi/fetchContentType';
 
 const inter = Inter({
     subsets: ["latin"],
@@ -46,6 +46,7 @@ export default async function LocaleLayout({
 }) {
 
     const pageData = await fetchContentType('global', { filters: { locale } }, true);
+    // console.log('pageData', pageData)
     return (
         <html lang={locale}>
             <ViewTransitions>
@@ -53,12 +54,12 @@ export default async function LocaleLayout({
                     <body
                         className={cn(
                             inter.className,
-                            "bg-charcoal antialiased h-full w-full"
+                            "antialiased min-h-screen bg-white text-gray-900"
                         )}
                     >
-                        <Navbar data={pageData.navbar} locale={locale} />
+                        <Navbar data={pageData?.navbar} locale={locale} />
                         {children}
-                        <Footer data={pageData.footer} locale={locale} />
+                        <Footer data={pageData?.footer} locale={locale} />
                     </body>
                 </CartProvider>
             </ViewTransitions>

@@ -1,18 +1,8 @@
 import { type Metadata } from "next";
-
-import { Container } from "@/components/container";
-import { Heading } from "@/components/elements/heading";
-import { Subheading } from "@/components/elements/subheading";
-import { BlogCard } from "@/components/blog-card";
-import { FeatureIconContainer } from "@/components/dynamic-zone/features/feature-icon-container";
-import { IconClipboardText } from "@tabler/icons-react";
-import { BlogPostRows } from "@/components/blog-post-rows";
-import { AmbientColor } from "@/components/decorations/ambient-color";
 import fetchContentType from "@/lib/strapi/fetchContentType";
-import { Article } from "@/types/types";
 import { generateMetadataObject } from '@/lib/shared/metadata';
-
 import ClientSlugHandler from "../ClientSlugHandler";
+import { BlogPageClient } from "@/components/blog-page-client";
 
 export async function generateMetadata({
   params,
@@ -24,7 +14,10 @@ export async function generateMetadata({
     populate: "seo.metaImage",
   }, true)
 
-  const seo = pageData?.seo;
+  const seo = pageData?.seo || {
+    metaTitle: "Blog - iConta24",
+    metaDescription: "Articole utile despre contabilitate, fiscalitate și legislație pentru antreprenori."
+  };
   const metadata = generateMetadataObject(seo);
   return metadata;
 }
@@ -32,46 +25,45 @@ export async function generateMetadata({
 export default async function Blog({
   params,
 }: {
-  params: { locale: string, slug: string };
+  params: { locale: string };
 }) {
   const blogPage = await fetchContentType('blog-page', {
     filters: { locale: params.locale },
   }, true)
+  
   const articles = await fetchContentType('articles', {
+    filters: { locale: params.locale },
+    populate: ['image', 'categories'],
+    sort: ['publishedAt:desc']
+  }, false)
+
+  const categories = await fetchContentType('categories', {
     filters: { locale: params.locale },
   }, false)
 
-  const localizedSlugs = blogPage.localizations?.reduce(
+  // Safely handle localizations
+  const localizedSlugs = blogPage?.localizations?.reduce(
     (acc: Record<string, string>, localization: any) => {
       acc[localization.locale] = "blog";
       return acc;
     },
     { [params.locale]: "blog" }
-  );
+  ) || { [params.locale]: "blog" };
+
+  const featuredArticle = articles?.data?.[0];
+  const recentArticles = articles?.data?.slice(1) || [];
 
   return (
-    <div className="relative overflow-hidden py-20 md:py-0">
+    <>
       <ClientSlugHandler localizedSlugs={localizedSlugs} />
-      <AmbientColor />
-      <Container className="flex flex-col items-center justify-between pb-20">
-        <div className="relative z-20 py-10 md:pt-40">
-          <FeatureIconContainer className="flex justify-center items-center overflow-hidden">
-            <IconClipboardText className="h-6 w-6 text-white" />
-          </FeatureIconContainer>
-          <Heading as="h1" className="mt-4">
-            {blogPage.heading}
-          </Heading>
-          <Subheading className="max-w-3xl mx-auto">
-            {blogPage.sub_heading}
-          </Subheading>
-        </div>
-
-        {articles.data.slice(0, 1).map((article: Article) => (
-          <BlogCard article={article} locale={params.locale} key={article.title} />
-        ))}
-
-        <BlogPostRows articles={articles.data} />
-      </Container>
-    </div>
+      <BlogPageClient
+        blogPage={blogPage}
+        featuredArticle={featuredArticle}
+        recentArticles={recentArticles}
+        categories={categories}
+        locale={params.locale}
+        totalArticles={articles?.data?.length || 0}
+      />
+    </>
   );
 }

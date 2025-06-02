@@ -14,10 +14,46 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        charcoal: "#08090A",
-        lightblack: "#1C1C1C",
-        secondary: "#E6E6E6",
-        muted: "var(--neutral-200)",
+        // Professional accounting color palette
+        primary: {
+          DEFAULT: "#0099ff", // Main brand color
+          light: "#33adff",
+          dark: "#0077cc",
+          50: "#e6f4ff",
+          100: "#b3deff",
+          200: "#80c9ff",
+          300: "#4db3ff",
+          400: "#1a9eff",
+          500: "#0099ff",
+          600: "#0077cc",
+          700: "#005599",
+          800: "#003366",
+          900: "#001133",
+        },
+        secondary: {
+          DEFAULT: "#f0f7ff", // Light blue background
+          dark: "#e1f0ff",
+        },
+        accent: {
+          DEFAULT: "#003d66", // Dark blue for text/accents
+          light: "#005299",
+          dark: "#002844",
+        },
+        gray: {
+          50: "#f9fafb",
+          100: "#f3f4f6",
+          200: "#e5e7eb",
+          300: "#d1d5db",
+          400: "#9ca3af",
+          500: "#6b7280",
+          600: "#4b5563",
+          700: "#374151",
+          800: "#1f2937",
+          900: "#111827",
+        },
+        success: "#10b981",
+        warning: "#f59e0b",
+        error: "#ef4444",
       },
       boxShadow: {
         derek: `0px 0px 0px 1px rgb(0 0 0 / 0.06),

@@ -10,6 +10,7 @@
     "strapi": "strapi",
     "deploy": "strapi deploy",
     "seed": "strapi import -f ./data/export_20250116105447.tar.gz",
+    "upload:team-images": "node ./scripts/upload-team-images.js",
     "postinstall": "node ./scripts/updateUuid.js"
   },
   "devDependencies": {
@@ -23,8 +24,11 @@
     "@strapi/plugin-seo": "^2.0.4",
     "@strapi/plugin-users-permissions": "5.12.4",
     "@strapi/strapi": "5.12.4",
+    "axios": "^1.6.0",
     "better-sqlite3": "11.7.0",
+    "form-data": "^4.0.0",
     "patch-package": "^8.0.0",
+    "pg": "^8.11.3",
     "pluralize": "^8.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
@@ -36,7 +40,7 @@
     "name": "A Strapi developer"
   },
   "strapi": {
-    "uuid": "LAUNCHPAD"
+    "uuid": "LAUNCHPAD-LOCAL-2c463f85-7dbb-4dd1-a2a8-40abf8a29cc8"
   },
   "engines": {
     "node": ">=18.0.0 <=22.x.x",

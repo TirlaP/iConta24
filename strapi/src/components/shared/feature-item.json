@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_shared_feature_items",
+  "info": {
+    "displayName": "Feature Item",
+    "icon": "check",
+    "description": "Individual feature or list item"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "included": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

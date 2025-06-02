@@ -1,32 +1,116 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { Button } from "../elements/button";
-import { AmbientColor } from "../decorations/ambient-color";
-import { Container } from "../container";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
+import { ArrowRight, Phone, Mail, CheckCircle } from "lucide-react";
 
-export const CTA = ({ heading, sub_heading, CTAs, locale }: { heading: string; sub_heading: string; CTAs: any[], locale: string }) => {
+interface CTAButton {
+  text: string;
+  URL: string;
+  variant?: 'primary' | 'secondary';
+}
+
+interface CTAProps {
+  heading: string;
+  sub_heading: string;
+  CTAs: CTAButton[];
+  locale?: string;
+}
+
+export const CTA = ({ heading, sub_heading, CTAs, locale = "ro" }: CTAProps) => {
   return (
-    <div className="relative py-40">
-      <AmbientColor />
-      <Container className="flex flex-col md:flex-row justify-between items-center w-full px-8">
-        <div className="flex flex-col">
-          <motion.h2 className="text-white text-xl text-center md:text-left md:text-3xl font-bold mx-auto md:mx-0 max-w-xl ">
-            {heading}
-          </motion.h2>
-          <p className="max-w-md mt-8 text-center md:text-left text-sm md:text-base mx-auto md:mx-0 text-neutral-400">
-            {sub_heading}
-          </p>
+    <section className="relative py-20 overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-accent via-accent-dark to-primary-900"></div>
+      <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
+
+      {/* Animated Elements */}
+      <motion.div
+        className="absolute top-10 left-10 w-72 h-72 bg-white/10 rounded-full blur-3xl"
+        animate={{
+          x: [0, 50, 0],
+          y: [0, -30, 0],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+
+      <div className="container-custom relative z-10">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            {/* Badge */}
+            <div className="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-semibold text-sm mb-6">
+              <CheckCircle className="w-4 h-4 mr-2" />
+              Garanție 100%
+            </div>
+
+            {/* Heading */}
+            <h2 className="heading-2 text-white mb-6">{heading}</h2>
+
+            {/* Description */}
+            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">{sub_heading}</p>
+
+            {/* Features */}
+            <div className="flex flex-wrap justify-center gap-4 mb-10">
+              <div className="flex items-center text-white/80">
+                <CheckCircle className="w-5 h-5 mr-2 text-primary-light" />
+                <span>Consultanță gratuită</span>
+              </div>
+              <div className="flex items-center text-white/80">
+                <CheckCircle className="w-5 h-5 mr-2 text-primary-light" />
+                <span>Setup rapid</span>
+              </div>
+              <div className="flex items-center text-white/80">
+                <CheckCircle className="w-5 h-5 mr-2 text-primary-light" />
+                <span>Fără costuri ascunse</span>
+              </div>
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+              {CTAs && CTAs.map((cta, index) => (
+                <Link 
+                  key={index}
+                  href={`/${locale}${cta.URL}`} 
+                  className={
+                    cta.variant === 'primary' || !cta.variant
+                      ? "bg-white text-accent px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 inline-flex items-center justify-center group"
+                      : "bg-transparent text-white border-2 border-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-accent transition-all duration-300 inline-flex items-center justify-center"
+                  }
+                >
+                  {cta.text}
+                  {(cta.variant === 'primary' || !cta.variant) && (
+                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                  )}
+                </Link>
+              ))}
+            </div>
+
+            {/* Contact Info */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-white/80 text-sm">
+              <a href="mailto:contact@iconta24.com" className="flex items-center hover:text-white transition-colors">
+                <Mail className="w-4 h-4 mr-2" />
+                contact@iconta24.com
+              </a>
+              <span className="hidden sm:block">•</span>
+              <a href="tel:0745823960" className="flex items-center hover:text-white transition-colors">
+                <Phone className="w-4 h-4 mr-2" />
+                0745 823 960
+              </a>
+              <span className="hidden sm:block">•</span>
+              <span>Luni - Vineri: 9:00 - 18:00</span>
+            </div>
+          </motion.div>
         </div>
-        <div className="flex items-center gap-4">
-          {CTAs && CTAs.map((cta, index) => (
-            <Button as={Link} key={index} href={`/${locale}${cta.URL}`} variant={cta.variant} className="py-3">
-              {cta.text}
-            </Button>
-          ))}
-        </div>
-      </Container>
-    </div>
+      </div>
+    </section>
   );
 };

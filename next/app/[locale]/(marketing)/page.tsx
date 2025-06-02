@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 
+import { generateMetadataObject } from '@/lib/shared/metadata';
 import PageContent from '@/lib/shared/PageContent';
 import fetchContentType from '@/lib/strapi/fetchContentType';
-import { generateMetadataObject } from '@/lib/shared/metadata';
 import ClientSlugHandler from './ClientSlugHandler';
 
 export async function generateMetadata({
@@ -41,7 +41,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
     true
   );
 
-  const localizedSlugs = pageData.localizations?.reduce(
+  const localizedSlugs = pageData?.localizations?.reduce(
     (acc: Record<string, string>, localization: any) => {
       acc[localization.locale] = "";
       return acc;

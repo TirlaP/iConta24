@@ -1,0 +1,20 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+healthcheckPath = "/admin"
+healthcheckTimeout = 100
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10
+
+[env]
+NODE_ENV = "production"
+NODE_OPTIONS = "--max-old-space-size=1024"
+
+[[services]]
+name = "strapi"
+source = "."
+
+[services.variables]
+PORT = "1337"
+HOST = "0.0.0.0"

@@ -1,0 +1,45 @@
+{
+  "collectionName": "components_shared_services",
+  "info": {
+    "displayName": "Service",
+    "icon": "file-text",
+    "description": "Individual service information"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "icon": {
+      "type": "enumeration",
+      "enum": [
+        "calculator",
+        "file-text",
+        "users",
+        "briefcase",
+        "chart-line",
+        "shield-check",
+        "rocket",
+        "cog"
+      ],
+      "default": "briefcase"
+    },
+    "features": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.feature-item"
+    },
+    "price": {
+      "type": "string"
+    },
+    "highlighted": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

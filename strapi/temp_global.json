@@ -1,0 +1,101 @@
+{"data": 
+{
+  "navbar": {
+    "left_navbar_items": [
+      {
+        "text": "Acasă",
+        "URL": "/"
+      },
+      {
+        "text": "Servicii",
+        "URL": "/servicii"
+      },
+      {
+        "text": "Înființare Firmă",
+        "URL": "/infiintare-firma"
+      },
+      {
+        "text": "Echipa",
+        "URL": "/echipa"
+      },
+      {
+        "text": "Blog",
+        "URL": "/blog"
+      },
+      {
+        "text": "Contact",
+        "URL": "/contact"
+      }
+    ],
+    "right_navbar_items": [
+      {
+        "text": "Contul Meu",
+        "URL": "/contul-meu"
+      },
+      {
+        "text": "Solicită Ofertă",
+        "URL": "/contact#oferta"
+      }
+    ]
+  },
+  "footer": {
+    "description": "Contabilitatea înseamnă mai mult decât să operezi documente și să raportezi cifrele. Înseamnă să îl ajuți pe antreprenor să ia deciziile în direcția cifrelor pe care și le dorește.",
+    "copyright": "Copyright © 2025 iConta24",
+    "designed_developed_by": "FACILITY ACCOUNT SRL",
+    "built_with": "CUI 37210737 • J33/377/2017",
+    "internal_links": [
+      {
+        "text": "Contabilitate Financiară",
+        "URL": "/servicii#contabilitate"
+      },
+      {
+        "text": "Declarații Fiscale",
+        "URL": "/servicii#declaratii"
+      },
+      {
+        "text": "Salarizare & HR",
+        "URL": "/servicii#salarizare"
+      },
+      {
+        "text": "Înființare Firmă",
+        "URL": "/infiintare-firma"
+      }
+    ],
+    "policy_links": [
+      {
+        "text": "GDPR",
+        "URL": "/gdpr"
+      },
+      {
+        "text": "Termeni și Condiții",
+        "URL": "/termeni-si-conditii"
+      },
+      {
+        "text": "Politica de Confidențialitate",
+        "URL": "/politica-confidentialitate"
+      },
+      {
+        "text": "FAQ",
+        "URL": "/faq"
+      }
+    ],
+    "social_media_links": [
+      {
+        "text": "Facebook",
+        "URL": "https://facebook.com/iconta24"
+      },
+      {
+        "text": "LinkedIn",
+        "URL": "https://linkedin.com/company/iconta24"
+      }
+    ]
+  },
+  "seo": {
+    "metaTitle": "iConta24 - Contabilitate Digitală pentru Afacerea Ta",
+    "metaDescription": "Servicii complete de contabilitate online. Platformă digitală modernă, consultanță gratuită, acces 24/7. Certificat CECCAR.",
+    "keywords": "contabilitate online, contabil, servicii contabilitate, contabilitate digitala, iconta24",
+    "canonicalURL": "https://iconta24.com",
+    "metaRobots": "index, follow"
+  },
+  "locale": "ro"
+}}
