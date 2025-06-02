@@ -86,12 +86,13 @@ export default {
 
       // Check if global exists for Romanian locale
       try {
-        const existingGlobal = await strapi.entityService.findFirst('api::global.global', {
+        const existingGlobals = await strapi.entityService.findMany('api::global.global', {
           locale: 'ro'
         } as any);
 
-        if (existingGlobal) {
-          await strapi.entityService.update('api::global.global', existingGlobal.id, {
+        if (existingGlobals && (Array.isArray(existingGlobals) ? existingGlobals.length > 0 : existingGlobals.id)) {
+          const globalId = Array.isArray(existingGlobals) ? existingGlobals[0].id : existingGlobals.id;
+          await strapi.entityService.update('api::global.global', globalId, {
             data: {
               ...globalData,
               locale: 'ro'
@@ -1011,12 +1012,13 @@ export default {
       };
 
       try {
-        const existingBlogPage = await strapi.entityService.findFirst('api::blog-page.blog-page', {
+        const existingBlogPages = await strapi.entityService.findMany('api::blog-page.blog-page', {
           locale: "ro"
         } as any);
 
-        if (existingBlogPage) {
-          await strapi.entityService.update('api::blog-page.blog-page', existingBlogPage.id, {
+        if (existingBlogPages && (Array.isArray(existingBlogPages) ? existingBlogPages.length > 0 : existingBlogPages.id)) {
+          const blogPageId = Array.isArray(existingBlogPages) ? existingBlogPages[0].id : existingBlogPages.id;
+          await strapi.entityService.update('api::blog-page.blog-page', blogPageId, {
             data: blogPageData as any
           });
           console.log('✅ Updated blog page for Romanian locale');
