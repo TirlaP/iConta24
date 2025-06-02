@@ -85,27 +85,37 @@ export default {
       };
 
       // Check if global exists for Romanian locale
-      const existingGlobal = await strapi.entityService.findMany('api::global.global', {
-        filters: {},
-        locale: 'ro'
-      } as any);
+      try {
+        const existingGlobal = await strapi.entityService.findFirst('api::global.global', {
+          locale: 'ro'
+        } as any);
 
-      if (existingGlobal) {
-        await strapi.entityService.update('api::global.global', existingGlobal.id, {
-          data: {
-            ...globalData,
-            locale: 'ro'
-          } as any
-        });
-        console.log('✅ Updated global settings');
-      } else {
+        if (existingGlobal) {
+          await strapi.entityService.update('api::global.global', existingGlobal.id, {
+            data: {
+              ...globalData,
+              locale: 'ro'
+            } as any
+          });
+          console.log('✅ Updated global settings for Romanian locale');
+        } else {
+          await strapi.entityService.create('api::global.global', {
+            data: {
+              ...globalData,
+              locale: 'ro'
+            } as any
+          });
+          console.log('✅ Created global settings for Romanian locale');
+        }
+      } catch (error) {
+        // If no Romanian locale exists, create it
         await strapi.entityService.create('api::global.global', {
           data: {
             ...globalData,
             locale: 'ro'
           } as any
         });
-        console.log('✅ Created global settings');
+        console.log('✅ Created global settings for Romanian locale (fallback)');
       }
 
       // 2. Create Homepage
@@ -1000,21 +1010,27 @@ export default {
         locale: "ro"
       };
 
-      const existingBlogPage = await strapi.entityService.findMany('api::blog-page.blog-page', {
-        filters: { locale: "ro" }
-      });
+      try {
+        const existingBlogPage = await strapi.entityService.findFirst('api::blog-page.blog-page', {
+          locale: "ro"
+        } as any);
 
-      if (existingBlogPage) {
-        // For single types, findMany returns a single object, not an array
-        await strapi.entityService.update('api::blog-page.blog-page', existingBlogPage.id, {
-          data: blogPageData as any
-        });
-        console.log('✅ Updated blog page');
-      } else {
+        if (existingBlogPage) {
+          await strapi.entityService.update('api::blog-page.blog-page', existingBlogPage.id, {
+            data: blogPageData as any
+          });
+          console.log('✅ Updated blog page for Romanian locale');
+        } else {
+          await strapi.entityService.create('api::blog-page.blog-page', {
+            data: blogPageData as any
+          });
+          console.log('✅ Created blog page for Romanian locale');
+        }
+      } catch (error) {
         await strapi.entityService.create('api::blog-page.blog-page', {
           data: blogPageData as any
         });
-        console.log('✅ Created blog page');
+        console.log('✅ Created blog page for Romanian locale (fallback)');
       }
 
       // 7. Create Categories
