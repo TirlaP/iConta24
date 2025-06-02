@@ -7,7 +7,6 @@ import { Inter } from 'next/font/google';
 import { Footer } from '@/components/footer';
 import { Navbar } from '@/components/navbar';
 import { CartProvider } from '@/context/cart-context';
-import HealthCheck from '@/components/health-check';
 import fetchContentType from '@/lib/strapi/fetchContentType';
 import { cn } from '@/lib/utils';
 import { ViewTransitions } from 'next-view-transitions';
@@ -58,7 +57,6 @@ export default async function LocaleLayout({
                             "antialiased min-h-screen bg-white text-gray-900"
                         )}
                     >
-                        <HealthCheck />
                         <Navbar data={pageData?.navbar} locale={locale} />
                         {children}
                         <Footer data={pageData?.footer} locale={locale} />

@@ -1,4 +1,5 @@
 import type { Core } from '@strapi/strapi';
+import { startKeepAlive } from './bootstrap/keep-alive';
 
 export default {
   /**
@@ -1115,10 +1116,24 @@ export default {
 
       console.log('✨ Romanian accounting data bootstrap completed!');
       
+      // Start keep-alive service to prevent Render from sleeping
+      if (process.env.NODE_ENV === 'production') {
+        console.log('🔄 Starting keep-alive service for production...');
+        startKeepAlive();
+      } else {
+        console.log('⏸️  Keep-alive service disabled in development');
+      }
+      
     } catch (error) {
       console.error('❌ Bootstrap error:', error);
       // Don't throw the error to prevent Strapi from failing to start
       console.log('⚠️  Bootstrap completed with errors. Please check the logs.');
+      
+      // Still start keep-alive even if bootstrap fails
+      if (process.env.NODE_ENV === 'production') {
+        console.log('🔄 Starting keep-alive service despite bootstrap errors...');
+        startKeepAlive();
+      }
     }
   },
 };
