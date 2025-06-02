@@ -36,6 +36,17 @@ export default async function Page({ params }: { params: { locale: string, slug:
         slug: params.slug,
         locale: params.locale,
       },
+      populate: {
+        dynamic_zone: {
+          populate: "*"
+        },
+        seo: {
+          populate: "*"
+        },
+        localizations: {
+          populate: "*"
+        }
+      }
     },
     true,
   );

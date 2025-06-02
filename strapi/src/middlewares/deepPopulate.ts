@@ -92,6 +92,11 @@ const getDeepPopulate = (uid: UID.Schema, opts: Options = {}) => {
 
 export default (config, { strapi }: { strapi: Core.Strapi }) => {
   return async (ctx, next) => {
+    // TEMPORARILY DISABLED - Deep populate is causing 400 errors
+    // TODO: Fix this properly
+    await next();
+    return;
+    
     // Skip health check and other system endpoints
     if (ctx.request.url.startsWith('/api/health')) {
       return await next();
