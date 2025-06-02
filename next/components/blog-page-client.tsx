@@ -1,7 +1,7 @@
 "use client";
-import { motion } from "framer-motion";
 import { BlogCard, BlogCardVertical } from "@/components/blog-card";
 import { Article } from "@/types/types";
+import { motion } from "framer-motion";
 import { FileText, Search } from "lucide-react";
 import { useState } from "react";
 
@@ -193,7 +193,7 @@ export function BlogPageClient({
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredAndSortedArticles.slice(0, visibleArticles).map((article: Article, index: number) => (
                 <motion.div
-                  key={article.id}
+                  key={article.documentId}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
