@@ -38,8 +38,13 @@ const getDeepPopulate = (uid: UID.Schema, opts: Options = {}) => {
         if (isVisible) {
           if (attributeName === 'testimonials') {
             acc[attributeName] = { populate: "user.image" };
+          } else if (attributeName === 'categories') {
+            acc[attributeName] = { populate: "name" };
+          } else if (attributeName === 'image') {
+            acc[attributeName] = { populate: "url,alternativeText,width,height" };
           } else {
-            acc[attributeName] = { populate: "*" };
+            // Reduce payload by being more selective
+            acc[attributeName] = { populate: "name,title,url,alternativeText" };
           }
         }
 
@@ -47,7 +52,8 @@ const getDeepPopulate = (uid: UID.Schema, opts: Options = {}) => {
       }
 
       case 'media': {
-        acc[attributeName] = { populate: "*" };
+        // Only populate essential image fields to reduce payload
+        acc[attributeName] = { populate: "url,alternativeText,width,height,mime" };
         break;
       }
 

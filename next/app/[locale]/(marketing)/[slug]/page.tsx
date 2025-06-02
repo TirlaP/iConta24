@@ -2,7 +2,9 @@ import { generateMetadataObject } from '@/lib/shared/metadata';
 import PageContent from '@/lib/shared/PageContent';
 import fetchContentType from '@/lib/strapi/fetchContentType';
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import ClientSlugHandler from '../ClientSlugHandler';
+import { ContentErrorFallback } from '@/components/ui/error-boundary';
 
 export async function generateMetadata({
   params,
@@ -38,6 +40,16 @@ export default async function Page({ params }: { params: { locale: string, slug:
     true,
   );
 
+  // Handle failed API calls
+  if (pageData === null) {
+    return <ContentErrorFallback />;
+  }
+
+  // Handle 404 - page not found
+  if (!pageData || !pageData.id) {
+    notFound();
+  }
+
   const localizedSlugs = pageData?.localizations?.reduce(
     (acc: Record<string, string>, localization: any) => {
       acc[localization.locale] = localization.slug;
@@ -51,6 +63,5 @@ export default async function Page({ params }: { params: { locale: string, slug:
       <ClientSlugHandler localizedSlugs={localizedSlugs} />
       <PageContent pageData={pageData} />
     </>
-
   );
 }

@@ -27,37 +27,74 @@ export function spreadStrapiData(data: StrapiResponse): StrapiData | null {
   return null
 }
 
+const FETCH_TIMEOUT = 15000; // 15 seconds
+const MAX_RETRIES = 2;
+
+async function fetchWithTimeout(url: string, options: RequestInit, timeout: number) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+  
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+    return response;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    throw error;
+  }
+}
+
 export default async function fetchContentType(
   contentType: string,
   params: Record<string, unknown> = {},
   spreadData?: boolean,
 ): Promise<any> {
-  const { isEnabled } = await draftMode()
+  const { isEnabled } = await draftMode();
 
-  try {
+  let lastError: Error | null = null;
+  
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const queryParams = { ...params };
 
-    const queryParams = { ...params };
+      if (isEnabled) {
+        queryParams.status = "draft";
+      }
 
-    if (isEnabled) {
-      queryParams.status = "draft";
+      // Construct the full URL for the API request
+      const url = new URL(`api/${contentType}`, process.env.NEXT_PUBLIC_API_URL);
+      const fullUrl = `${url.href}?${qs.stringify(queryParams)}`;
+
+      // Perform the fetch request with timeout
+      const response = await fetchWithTimeout(fullUrl, {
+        method: 'GET',
+        cache: isEnabled ? 'no-store' : 'force-cache',
+        next: { revalidate: isEnabled ? 0 : 300 }, // 5 minutes cache for published content
+      }, FETCH_TIMEOUT);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
+      const jsonData: StrapiResponse = await response.json();
+      return spreadData ? spreadStrapiData(jsonData) : jsonData;
+      
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error('Unknown error');
+      
+      if (attempt < MAX_RETRIES) {
+        console.warn(`Attempt ${attempt + 1} failed for ${contentType}, retrying...`, lastError.message);
+        // Exponential backoff: wait 1s, then 2s
+        await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+        continue;
+      }
     }
-
-    // Construct the full URL for the API request
-    const url = new URL(`api/${contentType}`, process.env.NEXT_PUBLIC_API_URL);
-
-    // Perform the fetch request with the provided query parameters
-    const response = await fetch(`${url.href}?${qs.stringify(queryParams)}`, {
-      method: 'GET',
-      cache: 'no-store',
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch data from Strapi (url=${url.toString()}, status=${response.status})`);
-    }
-    const jsonData: StrapiResponse = await response.json();
-    return spreadData ? spreadStrapiData(jsonData) : jsonData;
-  } catch (error) {
-    // Log any errors that occur during the fetch process
-    console.error('FetchContentTypeError', error);
   }
+
+  // If all retries failed, log error and return null
+  console.error(`FetchContentTypeError for ${contentType} after ${MAX_RETRIES + 1} attempts:`, lastError);
+  return null;
 }
