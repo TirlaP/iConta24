@@ -15,13 +15,13 @@ export function startKeepAlive() {
       });
       
       if (response.ok) {
-        const data = await response.json();
+        const data = await response.json() as { status: string; uptime: number };
         console.log(`✅ Health check OK - Status: ${data.status}, Uptime: ${Math.floor(data.uptime)}s`);
       } else {
         console.warn(`⚠️  Health check returned ${response.status}`);
       }
     } catch (error) {
-      console.error('❌ Health check failed:', error.message);
+      console.error('❌ Health check failed:', error instanceof Error ? error.message : 'Unknown error');
     }
   };
 
